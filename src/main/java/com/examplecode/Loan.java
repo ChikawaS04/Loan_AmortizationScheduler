@@ -35,20 +35,36 @@ public class Loan {
         return balance;
     }
 
-    public Loan(long loanID, BigDecimal principal, BigDecimal apr, int term, BigDecimal monthlyPayment, BigDecimal balance) {
+    public Loan(long loanID, BigDecimal principal, BigDecimal apr, int term) {
         this.loanID = loanID;
         this.principal = principal;
         this.apr = apr;
         this.term = term;
         this.balance = principal;
-        this.monthlyPayment = monthlyPayment;
+        this.monthlyPayment = calculateMonthlyPayment();
     }
 
-    public void applyMonthlyPayment(BigDecimal principal, BigDecimal apr, int term, BigDecimal monthlyPayment){
-        BigDecimal monthlyRate = apr.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP); // the monthly rate is denoted as r
+    private BigDecimal calculateMonthlyPayment(){
+        //Formula for monthly payment: pmt = P[r(1+r)^n] / [(1+r)^n - 1]
+
+        BigDecimal monthlyRate = apr.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP); // the monthly rate can be denoted as r
         BigDecimal onePlusR = BigDecimal.ONE.add(monthlyRate);
         BigDecimal onePlusRtoN = onePlusR.pow(term);
-        BigDecimal numerator = principal.multiply(monthlyRate).multiply(onePlusRtoN);
+        BigDecimal numerator = monthlyRate.multiply(onePlusRtoN);
         BigDecimal denominator = onePlusRtoN.subtract(BigDecimal.ONE);
+        return principal.multiply(numerator.divide(denominator, 2, RoundingMode.HALF_UP));
+    }
+
+    public void applyMonthlyPayment(){
+        /*Formulas:
+        * Monthly Interest Portion ($) = Principal * Monthly Rate (r)
+        * Monthly Principal Portion ($) = PMT - Monthly Interest Portion
+        * Remaining Balance = Balance - Monthly Principal Portion
+        * */
+
+        BigDecimal monthlyRate = apr.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
+        BigDecimal monthlyInterestPortion = balance.multiply(monthlyRate);
+        BigDecimal monthlyPrincipalPortion = monthlyPayment.subtract(monthlyInterestPortion);
+        balance = balance.subtract(monthlyPrincipalPortion);
     }
 }
