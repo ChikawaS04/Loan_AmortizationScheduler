@@ -55,7 +55,7 @@ public class Loan {
         return principal.multiply(numerator.divide(denominator, 2, RoundingMode.HALF_UP));
     }
 
-    public void applyMonthlyPayment(){
+    public PaymentResult applyMonthlyPayment(){
         /*Formulas:
         * Monthly Interest Portion ($) = Principal * Monthly Rate (r)
         * Monthly Principal Portion ($) = PMT - Monthly Interest Portion
@@ -66,5 +66,7 @@ public class Loan {
         BigDecimal monthlyInterestPortion = balance.multiply(monthlyRate);
         BigDecimal monthlyPrincipalPortion = monthlyPayment.subtract(monthlyInterestPortion);
         balance = balance.subtract(monthlyPrincipalPortion);
+
+        return new PaymentResult(monthlyInterestPortion, monthlyPrincipalPortion, balance);
     }
 }
