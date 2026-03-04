@@ -7,7 +7,7 @@ public class Loan {
     private final long loanID;
     private final BigDecimal principal;
     private final BigDecimal apr;
-    private final BigDecimal monthlyRate; // add this
+    private final BigDecimal monthlyRate;
     private final int term;
     private final BigDecimal monthlyPayment;
     private BigDecimal balance;
@@ -36,12 +36,12 @@ public class Loan {
         return balance;
     }
 
-    public Loan(long loanID, String principal, String apr, int term) {
+    public Loan(long loanID, String principal, String apr, int termYears) {
         this.loanID = loanID;
         this.principal = new BigDecimal(principal);
         this.apr = new BigDecimal(apr);
-        this.monthlyRate = new BigDecimal(apr).divide(BigDecimal.valueOf(1200), 10, RoundingMode.HALF_UP); // add this
-        this.term = term;
+        this.monthlyRate = new BigDecimal(apr).divide(BigDecimal.valueOf(1200), 15, RoundingMode.HALF_UP);
+        this.term = termYears * 12; // convert years to months once, used everywhere
         this.balance = new BigDecimal(principal);
         this.monthlyPayment = calculateMonthlyPayment();
     }
@@ -53,20 +53,15 @@ public class Loan {
         BigDecimal onePlusRtoN = onePlusR.pow(term);
         BigDecimal numerator = monthlyRate.multiply(onePlusRtoN);
         BigDecimal denominator = onePlusRtoN.subtract(BigDecimal.ONE);
-        return principal.multiply(numerator.divide(denominator, 2, RoundingMode.HALF_UP));
+        BigDecimal fraction = numerator.divide(denominator, 15, RoundingMode.HALF_UP);
+        return principal.multiply(fraction).setScale(2, RoundingMode.HALF_UP);
     }
 
     public PaymentResult applyMonthlyPayment(){
-        /*Formulas:
-        * Monthly Interest Portion ($) = Principal * Monthly Rate (r)
-        * Monthly Principal Portion ($) = PMT - Monthly Interest Portion
-        * Remaining Balance = Balance - Monthly Principal Portion
-        * */
-
         BigDecimal monthlyInterestPortion = balance.multiply(monthlyRate).setScale(2, RoundingMode.HALF_UP);
         BigDecimal monthlyPrincipalPortion = monthlyPayment.subtract(monthlyInterestPortion);
         // Last payment adjustment to ensure balance is zero
-        if(balance.subtract(monthlyPrincipalPortion).abs().compareTo(new BigDecimal("0.01")) < 0){
+        if(balance.subtract(monthlyPrincipalPortion).abs().compareTo(new BigDecimal("1.00")) < 0){
             monthlyPrincipalPortion = balance;
         }
         balance = balance.subtract(monthlyPrincipalPortion);

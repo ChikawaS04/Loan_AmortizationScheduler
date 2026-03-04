@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("========== AMORTIZATION SCHEDULE ==========\n");
         Loan newLoan = new Loan(474444774L, "900000", "5.5", 10);
         Loan newLoan2 = new Loan(346798493L, "50000", "5.5", 6);
         Loan newLoan3 = new Loan(908872356L, "239900", "5.5", 4);
@@ -29,9 +30,22 @@ public class Main {
             e.printStackTrace();
         }
 
-        // Print per-loan summary
-        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan.getLoanID(), t1.getTotalPaid());
-        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan2.getLoanID(), t2.getTotalPaid());
-        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan3.getLoanID(), t3.getTotalPaid());
+        System.out.println("\n=== Monthly Payment Schedule ===");
+        System.out.printf("Loan %-12d | Rate: %.2f%% | Term: %2d months | Monthly Payment: $%,.2f%n",
+                newLoan.getLoanID(), newLoan.getApr(), newLoan.getTerm(), newLoan.getMonthlyPayment());
+        System.out.printf("Loan %-12d | Rate: %.2f%% | Term: %2d months | Monthly Payment: $%,.2f%n",
+                newLoan2.getLoanID(), newLoan2.getApr(), newLoan2.getTerm(), newLoan2.getMonthlyPayment());
+        System.out.printf("Loan %-12d | Rate: %.2f%% | Term: %2d months | Monthly Payment: $%,.2f%n",
+                newLoan3.getLoanID(), newLoan3.getApr(), newLoan3.getTerm(), newLoan3.getMonthlyPayment());
+
+        System.out.println("\n=== Loan Summary ===");
+        System.out.printf("Loan %-12d | Principal: $%,12.2f | Total Paid: $%,12.2f%n",
+                newLoan.getLoanID(), newLoan.getPrincipal(), t1.getTotalPaid());
+        System.out.printf("Loan %-12d | Principal: $%,12.2f | Total Paid: $%,12.2f%n",
+                newLoan2.getLoanID(), newLoan2.getPrincipal(), t2.getTotalPaid());
+        System.out.printf("Loan %-12d | Principal: $%,12.2f | Total Paid: $%,12.2f%n",
+                newLoan3.getLoanID(), newLoan3.getPrincipal(), t3.getTotalPaid());
+
+        System.out.printf("%nBank Total Collected: $%,15.2f%n", davidsLedger.getTotalCollected());
     }
 }

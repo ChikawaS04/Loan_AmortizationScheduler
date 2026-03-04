@@ -24,7 +24,7 @@ public class LoanProcessor implements Runnable{
             ledger.addPayment(loan.getMonthlyPayment());
             totalPaid = totalPaid.add(result.principalPortion().add(result.interestPortion()));
 
-            System.out.printf("Loan %d - Month %d: Interest=$%.2f, Principal=$%.2f, New Balance=$%.2f%n",
+            System.out.printf("Loan ID: %d - Month %d: Interest=$%.2f, Principal=$%.2f, Remaining Balance=$%.2f%n",
                     loan.getLoanID(), i, result.interestPortion(), result.principalPortion(), result.newBalance());
         }
     }
