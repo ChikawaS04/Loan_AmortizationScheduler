@@ -10,14 +10,11 @@ public class LoanProcessor implements Runnable{
         this.loan = loan;
     }
 
-    static BigDecimal totalCollected = BigDecimal.ZERO;
-
     @Override
     public void run(){
 
         for(int i = 1; i <= loan.getTerm(); i++){
             loan.applyMonthlyPayment();
-            totalCollected = totalCollected.add(loan.getMonthlyPayment());
         }
     }
 }
