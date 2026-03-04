@@ -14,6 +14,6 @@ public class CompanyLedger {
     }
 
     public synchronized void addPayment(BigDecimal amount) {
-        totalCollected = totalCollected.add(amount);
+        totalCollected = totalCollected.add(amount); //adds the amount to the total collected
     }
 }
