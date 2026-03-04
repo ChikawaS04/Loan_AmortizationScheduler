@@ -1,7 +1,6 @@
 package com.examplecode;
 
 import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class LoanProcessor implements Runnable{
 
@@ -11,11 +10,14 @@ public class LoanProcessor implements Runnable{
         this.loan = loan;
     }
 
-    static AtomicReference<BigDecimal> totalCollected;
+    static BigDecimal totalCollected = BigDecimal.ZERO;
 
     @Override
     public void run(){
+
         for(int i = 1; i <= loan.getTerm(); i++){
+            loan.applyMonthlyPayment();
+            totalCollected = totalCollected.add(loan.getMonthlyPayment());
         }
     }
 }
