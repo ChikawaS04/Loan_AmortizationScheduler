@@ -7,6 +7,7 @@ public class Loan {
     private final long loanID;
     private final BigDecimal principal;
     private final BigDecimal apr;
+    private final BigDecimal monthlyRate; // add this
     private final int term;
     private final BigDecimal monthlyPayment;
     private BigDecimal balance;
@@ -39,6 +40,7 @@ public class Loan {
         this.loanID = loanID;
         this.principal = new BigDecimal(principal);
         this.apr = new BigDecimal(apr);
+        this.monthlyRate = new BigDecimal(apr).divide(BigDecimal.valueOf(1200), 10, RoundingMode.HALF_UP); // add this
         this.term = term;
         this.balance = new BigDecimal(principal);
         this.monthlyPayment = calculateMonthlyPayment();
@@ -47,7 +49,6 @@ public class Loan {
     private BigDecimal calculateMonthlyPayment(){
         //Formula for monthly payment: pmt = P[r(1+r)^n] / [(1+r)^n - 1]
 
-        BigDecimal monthlyRate = apr.divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP); // the monthly rate can be denoted as r
         BigDecimal onePlusR = BigDecimal.ONE.add(monthlyRate);
         BigDecimal onePlusRtoN = onePlusR.pow(term);
         BigDecimal numerator = monthlyRate.multiply(onePlusRtoN);
@@ -62,10 +63,8 @@ public class Loan {
         * Remaining Balance = Balance - Monthly Principal Portion
         * */
 
-        BigDecimal monthlyRate = apr.divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
         BigDecimal monthlyInterestPortion = balance.multiply(monthlyRate).setScale(2, RoundingMode.HALF_UP);
         BigDecimal monthlyPrincipalPortion = monthlyPayment.subtract(monthlyInterestPortion);
-
         // Last payment adjustment to ensure balance is zero
         if(balance.subtract(monthlyPrincipalPortion).abs().compareTo(new BigDecimal("0.01")) < 0){
             monthlyPrincipalPortion = balance;

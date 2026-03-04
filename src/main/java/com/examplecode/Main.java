@@ -30,14 +30,8 @@ public class Main {
         }
 
         // Print per-loan summary
-        BigDecimal loan1Total = newLoan.getMonthlyPayment().multiply(BigDecimal.valueOf(newLoan.getTerm()));
-        BigDecimal loan2Total = newLoan2.getMonthlyPayment().multiply(BigDecimal.valueOf(newLoan2.getTerm()));
-        BigDecimal loan3Total = newLoan3.getMonthlyPayment().multiply(BigDecimal.valueOf(newLoan3.getTerm()));
-
-        System.out.println("\n=== Loan Summary ===");
-        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan.getLoanID(), loan1Total);
-        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan2.getLoanID(), loan2Total);
-        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan3.getLoanID(), loan3Total);
-        System.out.printf("\nCompany Grand Total Collected: $%.2f%n", davidsLedger.getTotalCollected());
+        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan.getLoanID(), t1.getTotalPaid());
+        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan2.getLoanID(), t2.getTotalPaid());
+        System.out.printf("Loan %d Total Paid: $%.2f%n", newLoan3.getLoanID(), t3.getTotalPaid());
     }
 }
