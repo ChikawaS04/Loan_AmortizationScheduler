@@ -1,7 +1,5 @@
 package com.examplecode;
 
-import java.math.BigDecimal;
-
 public class LoanProcessor implements Runnable{
 
     private final Loan loan;
