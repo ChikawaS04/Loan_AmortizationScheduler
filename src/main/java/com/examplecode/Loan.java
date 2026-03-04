@@ -12,7 +12,7 @@ public class Loan {
     private final BigDecimal principal;          // Original loan amount
     private final BigDecimal apr;                // Annual percentage rate (APR)
     private final BigDecimal monthlyRate;        // Monthly interest rate (APR / 1200)
-    private final int term;                      // Loan term in months
+    private final int term;                      // Loan term in years
     private final BigDecimal monthlyPayment;     // Fixed monthly payment amount
     private BigDecimal balance;                  // Current outstanding balance
 

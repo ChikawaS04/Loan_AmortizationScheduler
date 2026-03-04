@@ -10,13 +10,13 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("========== AMORTIZATION SCHEDULE ==========\n");
 
+        // Initialize a shared ledger to track total collections across all loans
+        CompanyLedger davidsLedger = new CompanyLedger(BigDecimal.ZERO);
+
         // Create three sample loans with different principals and terms (all at 5.5% APR)
         Loan newLoan = new Loan(474444774L, "900000", "5.5", 10);
         Loan newLoan2 = new Loan(346798493L, "50000", "5.5", 6);
         Loan newLoan3 = new Loan(908872356L, "239900", "5.5", 4);
-
-        // Initialize a shared ledger to track total collections across all loans
-        CompanyLedger davidsLedger = new CompanyLedger(BigDecimal.ZERO);
 
         // Create loan processors to handle payment calculations for each loan
         LoanProcessor t1 = new LoanProcessor(newLoan, davidsLedger);
