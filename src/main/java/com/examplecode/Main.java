@@ -2,19 +2,28 @@ package com.examplecode;
 
 import java.math.BigDecimal;
 
+/**
+ * Main application demonstrating concurrent loan processing and amortization schedule calculation.
+ * Creates multiple loans and processes them in parallel threads while tracking payments in a shared ledger.
+ */
 public class Main {
     public static void main(String[] args) {
         System.out.println("========== AMORTIZATION SCHEDULE ==========\n");
+
+        // Create three sample loans with different principals and terms (all at 5.5% APR)
         Loan newLoan = new Loan(474444774L, "900000", "5.5", 10);
         Loan newLoan2 = new Loan(346798493L, "50000", "5.5", 6);
         Loan newLoan3 = new Loan(908872356L, "239900", "5.5", 4);
 
+        // Initialize a shared ledger to track total collections across all loans
         CompanyLedger davidsLedger = new CompanyLedger(BigDecimal.ZERO);
 
+        // Create loan processors to handle payment calculations for each loan
         LoanProcessor t1 = new LoanProcessor(newLoan, davidsLedger);
         LoanProcessor t2 = new LoanProcessor(newLoan2, davidsLedger);
         LoanProcessor t3 = new LoanProcessor(newLoan3, davidsLedger);
 
+        // Process loans concurrently using separate threads
         Thread threadOne = new Thread(t1);
         Thread threadTwo = new Thread(t2);
         Thread threadThree = new Thread(t3);
@@ -22,6 +31,7 @@ public class Main {
         threadTwo.start();
         threadThree.start();
 
+        // Wait for all loan processing threads to complete
         try {
             threadOne.join();
             threadTwo.join();
@@ -30,6 +40,7 @@ public class Main {
             e.printStackTrace();
         }
 
+        // Display summary information for all processed loans
         System.out.println("\n=== Monthly Payment Schedule ===");
         System.out.printf("Loan %-12d | Rate: %.2f%% | Term: %2d months | Monthly Payment: $%,.2f%n",
                 newLoan.getLoanID(), newLoan.getApr(), newLoan.getTerm(), newLoan.getMonthlyPayment());
