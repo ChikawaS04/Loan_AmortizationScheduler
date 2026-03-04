@@ -35,12 +35,12 @@ public class Loan {
         return balance;
     }
 
-    public Loan(long loanID, BigDecimal principal, BigDecimal apr, int term) {
+    public Loan(long loanID, String principal, String apr, int term) {
         this.loanID = loanID;
-        this.principal = principal;
-        this.apr = apr;
+        this.principal = new BigDecimal(principal);
+        this.apr = new BigDecimal(apr);
         this.term = term;
-        this.balance = principal;
+        this.balance = new BigDecimal(principal);
         this.monthlyPayment = calculateMonthlyPayment();
     }
 
@@ -66,7 +66,6 @@ public class Loan {
         BigDecimal monthlyInterestPortion = balance.multiply(monthlyRate);
         BigDecimal monthlyPrincipalPortion = monthlyPayment.subtract(monthlyInterestPortion);
         balance = balance.subtract(monthlyPrincipalPortion);
-
         return new PaymentResult(monthlyInterestPortion, monthlyPrincipalPortion, balance);
     }
 }
