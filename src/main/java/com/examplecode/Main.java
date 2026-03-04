@@ -31,7 +31,7 @@ public class Main {
         threadTwo.start();
         threadThree.start();
 
-        // Wait for all loan processing threads to complete
+        // Wait for all loan processing threads to complete, then join main thread
         try {
             threadOne.join();
             threadTwo.join();
